@@ -40,11 +40,12 @@ class Serpent:
             w[i] = l_move32(w[i - 8] ^ w[i - 5] ^ w[i - 3] ^ w[i - 1] ^ 0x9e3779b9 ^ i, 11)
 
         k = []
-        s_counter = 2
+        s_counter = 3
         for i in range(132):
-            if i % 4 == 0:
-                s_counter = (s_counter + 1) % 8
+            if s_counter < 0:
+                s_counter = 7
             k.append(Serpent.s_box(s_counter, w[i], 32))
+            s_counter -= 1
 
         sliced = []
         for i in range(132 // 4):
