@@ -104,7 +104,7 @@ class MainWindow(QMainWindow, Ui_CryptoWindow):
             button.setChecked(not state)
             button.setText('Зашифровать')
             return
-        if len(self.vector_input.text()) != 16:
+        if self.modeBox.currentIndex() and len(self.vector_input.text()) != 16:
             QMessageBox.information(self, 'Ошибка', 'Вектор инициализации должен иметь длину 16 символов')
             button = self.sender().parent().workButton
             button = cast(QPushButton, button)
@@ -120,10 +120,6 @@ class MainWindow(QMainWindow, Ui_CryptoWindow):
         signal.update.connect(widget.progressBar.setValue)
         widget.crypto_thread = Thread(target=thread_part, args=(widget, state, signal), daemon=True)
         widget.crypto_thread.start()
-
-    @property
-    def current_algo(self):
-        return self.algoBox.currentData(Qt.DisplayRole)
 
     def open_file(self):
         widget = self.sender().parent()
