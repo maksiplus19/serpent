@@ -71,6 +71,8 @@ class Ui_CryptoWindow(object):
         self.widgetSpace = QtWidgets.QVBoxLayout()
         self.widgetSpace.setObjectName("widgetSpace")
         self.gridLayout.addLayout(self.widgetSpace, 0, 1, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout_3.addWidget(self.scrollArea)
         CryptoWindow.setCentralWidget(self.centralwidget)
