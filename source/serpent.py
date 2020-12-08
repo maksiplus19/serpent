@@ -1,5 +1,5 @@
 import struct
-from typing import List, Union
+from typing import List, Union, Dict
 from functools import reduce
 
 import source.tables as tables
@@ -8,12 +8,14 @@ from source.support_func import permutation, l_move32, r_move32
 
 
 class Serpent:
+    key_storage: Dict[Union[str, bytes], List[int]] = {}
+
     @staticmethod
     def batch_size():
         return 16
 
     @staticmethod
-    def gen_key(key: Union[str, bytes]) -> List:
+    def gen_key(key: Union[str, bytes]) -> List[int]:
         if isinstance(key, str):
             key = bytes(key, 'utf8')
         space = 0
@@ -58,6 +60,12 @@ class Serpent:
         return arr
 
     @staticmethod
+    def get_keys(key: Union[str, bytes]) -> List[int]:
+        if key not in Serpent.key_storage:
+            Serpent.key_storage[key] = Serpent.gen_key(key)
+        return Serpent.key_storage[key]
+
+    @staticmethod
     def s_box(box: int, num: int, size: int, inverse: bool = False) -> int:
         res = 0
         for i in range(size // 4):
@@ -71,7 +79,7 @@ class Serpent:
         if len(block) != 16:
             raise LenError(16, len(block))
 
-        keys = Serpent.gen_key(key)
+        keys = Serpent.get_keys(key)
 
         b = int.from_bytes(block, 'big', signed=False)
 
@@ -87,7 +95,7 @@ class Serpent:
         if len(block) != 16:
             raise LenError(16, len(block))
 
-        keys = Serpent.gen_key(key)
+        keys = Serpent.get_keys(key)
 
         b = int.from_bytes(block, 'big', signed=False)
 
